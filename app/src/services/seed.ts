@@ -14,10 +14,12 @@ export const CATEGORIES: Category[] = [
 ];
 
 export interface StoredBudget {
-  _id: string;
+   _id: string;
   userId: string;
   month: string; // "YYYY-MM"
   amount: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 function isoDaysAgo(days: number): string {

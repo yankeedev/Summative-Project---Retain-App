@@ -5,8 +5,11 @@ import {
   makeBudgets,
   makeExpenses,
   makeUsers,
+  StoredBudget,
+
 } from "./seed";
 import type {
+    Budget,
   Category,
   Expense,
   ExpenseFilters,
@@ -33,6 +36,164 @@ function delay(ms = 250): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+
+// bugdget function
+
+function computeBudget(userId: string, stored: StoredBudget): Budget {
+ 
+  const spent = load<Expense[]>(KEYS.expenses, [])
+    .filter((ex) => ex.userId === userId && ex.date.startsWith(stored.month))
+    .reduce((sum, ex) => sum + ex.amount, 0);
+
+  const remaining = stored.amount - spent;
+  
+  let status: Budget["status"];
+  if (remaining < 0) status = "over";
+  else if (spent >= stored.amount * 0.75) status = "approaching";
+  else status = "within";
+
+  return {
+    _id: stored._id,
+    userId: stored.userId,
+    month: stored.month,
+    amount: stored.amount,
+    spent,
+    remaining,
+    status,
+    createdAt: stored.createdAt ?? new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+
+export async function getBudget(
+  userId: string,
+  month: string
+): Promise<Budget | null> {
+  await delay();
+  seedOnce();
+  const stored = load<StoredBudget[]>(KEYS.budgets, []).find(
+    (b) => b.userId === userId && b.month === month
+  );
+  return stored ? computeBudget(userId, stored) : null;
+}
+
+
+export async function upsertBudget(
+  userId: string,
+  month: string,
+  amount: number
+): Promise<Budget> {
+  await delay();
+  seedOnce();
+  const budgets = load<StoredBudget[]>(KEYS.budgets, []);
+  let stored = budgets.find((b) => b.userId === userId && b.month === month);
+  const now = new Date().toISOString();
+
+  if (!stored) {
+    stored = { _id: uid("budget_"), userId, month, amount, createdAt: now };
+    budgets.push(stored);
+  } else {
+    stored.amount = amount;
+    stored.updatedAt = now;
+  }
+  save(KEYS.budgets, budgets);
+  return computeBudget(userId, stored);
+}
+
+
+export async function createCategory(name: string): Promise<Category> {
+  await delay();
+  seedOnce();
+  const categories = load<Category[]>(KEYS.categories, []);
+  const category: Category = {
+    _id: uid("cat_"),
+    name,
+    isDefault: false,
+  };
+  categories.push(category);
+  save(KEYS.categories, categories);
+  return category;
+}
+
+
+export async function updateCategory(id: string, name: string): Promise<Category> {
+  await delay();
+  seedOnce();
+  const categories = load<Category[]>(KEYS.categories, []);
+  const category = categories.find((c) => c._id === id);
+  if (!category) throw new Error("Category not found");
+  category.name = name;
+  save(KEYS.categories, categories);
+  return category;
+}
+
+
+export async function deleteCategory(id: string): Promise<void> {
+  await delay();
+  seedOnce();
+  const categories = load<Category[]>(KEYS.categories, []);
+  const target = categories.find((c) => c._id === id);
+  if (!target) throw new Error("Category not found");
+  if (target.isDefault) throw new Error("Cannot delete the default category");
+
+  const defaultCat = categories.find((c) => c.isDefault)!;
+  save(
+    KEYS.expenses,
+    load<Expense[]>(KEYS.expenses, []).map((ex) =>
+      categoryId(ex.category) === id ? { ...ex, category: defaultCat } : ex
+    )
+  );
+  save(
+    KEYS.categories,
+    categories.filter((c) => c._id !== id)
+  );
+}
+
+interface AuthResult {
+  token: string;
+  user: User;
+}
+
+function signUser(user: User): AuthResult {
+  // pseudo-token: bearer.<userId>.<timestamp>
+  return { token: `mock.${user._id}.${Date.now()}`, user };
+}
+
+
+export async function signUp(
+  name: string,
+  email: string,
+  password: string
+): Promise<AuthResult> {
+  await delay();
+  seedOnce();
+  const users = load<User[]>(KEYS.users, []);
+  if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
+    throw new Error("Email already registered");
+  }
+  const user: User = {
+    _id: uid("u_"),
+    name,
+    email,
+    role: "user",
+    createdAt: new Date().toISOString(),
+  };
+  users.push(user);
+  save(KEYS.users, users);
+  return signUser(user);
+}
+
+
+export async function signIn(email: string, password: string): Promise<AuthResult> {
+  await delay();
+  seedOnce();
+  const user = load<User[]>(KEYS.users, []).find(
+    (u) => u.email.toLowerCase() === email.toLowerCase()
+  );
+  if (!user || password !== "password") throw new Error("Invalid email or password");
+  return signUser(user);
+}
 function seedOnce(): void {
   if (seeded) return;
   seeded = true;
