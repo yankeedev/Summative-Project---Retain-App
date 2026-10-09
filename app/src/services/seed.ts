@@ -1,4 +1,4 @@
-import type { Budget, Category, Expense, User } from "../types";
+import type { Category, Expense, User } from "../types";
 
 export const DEMO_USER_ID = "u_demo";
 export const ADMIN_USER_ID = "u_admin";

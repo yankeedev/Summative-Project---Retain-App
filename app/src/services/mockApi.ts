@@ -5,11 +5,10 @@ import {
   makeBudgets,
   makeExpenses,
   makeUsers,
-  StoredBudget,
-
 } from "./seed";
+import type { StoredBudget } from "./seed";
 import type {
-    Budget,
+  Budget,
   Category,
   Expense,
   ExpenseFilters,
@@ -164,7 +163,7 @@ function signUser(user: User): AuthResult {
 export async function signUp(
   name: string,
   email: string,
-  password: string
+  _password: string // unused in the mock (no hashing yet) — the _ prefix tells TS that's intentional
 ): Promise<AuthResult> {
   await delay();
   seedOnce();

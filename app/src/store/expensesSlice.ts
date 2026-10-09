@@ -1,5 +1,3 @@
-import { createAsyncThunk, createSlice }
-
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { listExpenses } from "../services/mockApi";
 import type {
