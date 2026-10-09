@@ -1,5 +1,3 @@
-// SignUp.tsx — registration. New users are ALWAYS role "user" (the mock
-// API sets that). After signing up they're logged in immediately.
 
 import { useState, type FormEvent } from "react";
 import {
@@ -29,7 +27,7 @@ export default function SignUp() {
     event.preventDefault();
     setError(null);
 
-    // Client-side check before calling the API:
+    // client-side check
     if (password !== confirm) {
       setError("Passwords do not match");
       return;
