@@ -26,7 +26,7 @@ export default function Layout() {
         <Toolbar>
           <Typography variant="h6" sx={{ mr: 3 }}>Retain</Typography>
           {navItems.map((item) => (
-            <Button key={item.to} color="inherit" component={Link} to={item.to}>
+            <Button key={item.to} color="inherit" component={Link} to={item.to} sx={{ mr: 1 }}>
               {item.label}
             </Button>
           ))}

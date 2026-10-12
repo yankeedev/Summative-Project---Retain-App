@@ -91,7 +91,7 @@ return (
         size="small"
         value={filters.dateFrom}
         onChange={(e) => dispatch(setDateFrom(e.target.value))}
-        InputLabelProps={{ shrink: true }}
+        slotProps={{ inputLabel: { shrink: true } }}
       />
       <TextField
         label="To"
@@ -99,7 +99,7 @@ return (
         size="small"
         value={filters.dateTo}
         onChange={(e) => dispatch(setDateTo(e.target.value))}
-        InputLabelProps={{ shrink: true }}
+        slotProps={{ inputLabel: { shrink: true } }}
       />
       <TextField
         label="Min amount"

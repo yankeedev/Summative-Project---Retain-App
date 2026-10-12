@@ -5,6 +5,7 @@ import Placeholder from "./components/Placeholder";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Budget from "./pages/Budget";
 
 export default function App() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
           <Route path="/expenses" element={<Placeholder title="Expenses" />} />
-          <Route path="/budget" element={<Placeholder title="Budget" />} />
+          <Route path="/budget" element={<Budget />} />
         </Route>
       </Route>
 
