@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AdminRoute from "./components/AdminRoute";
 import Layout from "./components/Layout";
-import Placeholder from "./components/Placeholder";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Budget from "./pages/Budget";
 import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -26,7 +26,7 @@ export default function App() {
 
       <Route element={<AdminRoute />}>
         <Route element={<Layout />}>
-          <Route path="/admin" element={<Placeholder title="Admin" />} />
+          <Route path="/admin" element={<Admin />} />
         </Route>
       </Route>
 
