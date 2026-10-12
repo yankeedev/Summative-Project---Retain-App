@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Budget from "./pages/Budget";
+import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/budget" element={<Budget />} />
         </Route>
