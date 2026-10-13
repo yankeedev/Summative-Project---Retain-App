@@ -65,3 +65,20 @@ export interface Paginated<T> {
   pages: number;
   limit: number;
 }
+export interface CategoryUsage {
+  name: string;
+  count: number;
+  total: number;
+}
+
+export interface AdminInsights {
+  totalUsers: number;
+  totalExpenses: number;
+  totalValue: number;
+  monthExpenses: number;
+  perCategory: CategoryUsage[];
+  topCategories: CategoryUsage[];
+  bottomCategories: CategoryUsage[];
+  recentExpenses: Expense[];
+  recentUsers: User[];
+}

@@ -1,5 +1,6 @@
 import api, { apiError } from "./api";
 import type {
+  AdminInsights,
   Budget,
   Category,
   Expense,
@@ -25,6 +26,15 @@ export async function signUp(
     throw apiError(err);
   }
 }
+export async function getAdminInsights(): Promise<AdminInsights> {
+  try {
+    const { data } = await api.get<AdminInsights>("/admin/insights");
+    return data;
+  } catch (err) {
+    throw apiError(err);
+  }
+}
+
 
 export async function signIn(email: string, password: string): Promise<AuthResult> {
   try {
