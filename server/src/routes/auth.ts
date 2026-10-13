@@ -14,7 +14,9 @@ function publicUser(user: { _id: unknown; name: string; email: string; role: str
   };
 }
 function signToken(userId: string): string {
-  return jwt.sign({ sub: userId }, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
+  return jwt.sign({ sub: userId }, env.jwtSecret, {
+    expiresIn: env.jwtExpiresIn as jwt.SignOptions["expiresIn"],
+  });
 }
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body ?? {};

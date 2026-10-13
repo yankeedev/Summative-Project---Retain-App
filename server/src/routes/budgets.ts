@@ -1,4 +1,5 @@
 import { Router } from "express";
+import type { Types } from "mongoose";
 import { requireAuth } from "../middleware/auth";
 import { Budget } from "../models/Budget";
 import { Expense } from "../models/Expense";
@@ -9,7 +10,8 @@ router.use(requireAuth);
 type Status = "within" | "approaching" | "over";
 
 interface StoredBudgetShape {
-  userId: unknown;
+  _id: unknown;
+  userId: Types.ObjectId;
   month: string;
   amount: number;
   createdAt?: Date;
@@ -27,7 +29,7 @@ async function buildBudget(stored: StoredBudgetShape) {
   const status: Status =
     remaining < 0 ? "over" : spent >= stored.amount * 0.75 ? "approaching" : "within";
   return {
-    _id: undefined,
+    _id: stored._id,
     userId: stored.userId,
     month: stored.month,
     amount: stored.amount,
@@ -59,7 +61,7 @@ router.put("/:month", async (req, res) => {
     { amount },
     { new: true, upsert: true, runValidators: true }
   );
-  res.json(await buildBudget(stored));
+  res.json(await buildBudget(stored!));
 });
 
 export default router;
