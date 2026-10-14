@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/auth";
+import { requireAdmin, requireAuth } from "../middleware/auth";
 import { Category } from "../models/Category";
 import { Expense } from "../models/Expense";
 
@@ -9,7 +9,7 @@ router.get("/", async (_req, res) => {
   const categories = await Category.find().sort({ name: 1 });
   res.json(categories);
 });
-router.post("/", async (req, res) => {
+router.post("/", requireAdmin, async (req, res) => {
   const name = String(req.body?.name ?? "").trim();
   if (!name) {
     res.status(400).json({ message: "Name is required" });
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   const category = await Category.create({ name, isDefault: false });
   res.status(201).json(category);
 });
-router.put("/:id", async (req, res) => {
+router.put("/:id", requireAdmin, async (req, res) => {
   const name = String(req.body?.name ?? "").trim();
   if (!name) {
     res.status(400).json({ message: "Name is required" });
@@ -31,7 +31,7 @@ router.put("/:id", async (req, res) => {
   }
   res.json(category);
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAdmin, async (req, res) => {
   const category = await Category.findById(req.params.id);
   if (!category) {
     res.status(404).json({ message: "Category not found" });

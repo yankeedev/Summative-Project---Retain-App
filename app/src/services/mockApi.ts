@@ -35,7 +35,6 @@ export async function getAdminInsights(): Promise<AdminInsights> {
   }
 }
 
-
 export async function signIn(email: string, password: string): Promise<AuthResult> {
   try {
     const { data } = await api.post<AuthResult>("/auth/signin", { email, password });

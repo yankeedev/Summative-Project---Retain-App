@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -30,35 +30,28 @@ import {
 import {
   createCategory,
   deleteCategory,
+  getAdminInsights,
   listCategories,
-  listExpenses,
   updateCategory,
 } from "../services/mockApi";
-import type { Category, Expense, ExpenseFilters } from "../types";
+import type { AdminInsights, Category, CategoryUsage } from "../types";
 
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
-// fetch everything so the admin can see totals across all expenses
-const ALL_FILTERS: ExpenseFilters = {
-  search: "",
-  category: "all",
-  paymentMethod: "all",
-  dateFrom: "",
-  dateTo: "",
-  minAmount: "",
-  maxAmount: "",
-  sortBy: "date",
-  order: "desc",
-  page: 1,
-  limit: 200,
-};
+function shortDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 export default function Admin() {
+  const [insights, setInsights] = useState<AdminInsights | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,14 +66,11 @@ export default function Admin() {
     setLoading(true);
     setError(null);
     try {
-      const [cats, expensePage] = await Promise.all([
-        listCategories(),
-        listExpenses(ALL_FILTERS),
-      ]);
+      const [data, cats] = await Promise.all([getAdminInsights(), listCategories()]);
+      setInsights(data);
       setCategories(cats);
-      setExpenses(expensePage.data);
-    } catch {
-      setError("Could not load admin data");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not load admin data");
     } finally {
       setLoading(false);
     }
@@ -89,28 +79,6 @@ export default function Admin() {
   useEffect(() => {
     void load();
   }, []);
-
-  const totalAmount = expenses.reduce((sum, ex) => sum + ex.amount, 0);
-  const average = expenses.length > 0 ? totalAmount / expenses.length : 0;
-
-  // spending grouped by category, biggest first
-  const perCategory = useMemo(() => {
-    const map = new Map<string, { catId: string; name: string; count: number; total: number }>();
-    for (const ex of expenses) {
-      const catId = typeof ex.category === "string" ? ex.category : ex.category._id;
-      const catName =
-        typeof ex.category === "string"
-          ? (categories.find((c) => c._id === catId)?.name ?? "Other")
-          : ex.category.name;
-      const cur = map.get(catId) ?? { catId, name: catName, count: 0, total: 0 };
-      cur.count += 1;
-      cur.total += ex.amount;
-      map.set(catId, cur);
-    }
-    return [...map.values()].sort((a, b) => b.total - a.total);
-  }, [expenses, categories]);
-
-  const richest = perCategory[0]?.total ?? 0;
 
   function openCreate(): void {
     setEditing(null);
@@ -156,6 +124,28 @@ export default function Admin() {
     }
   }
 
+  const perCategory = insights?.perCategory ?? [];
+  const richest = perCategory.reduce((max, c) => Math.max(max, c.total), 0);
+
+  function usageRows(rows: CategoryUsage[]) {
+    if (rows.length === 0) {
+      return (
+        <TableRow>
+          <TableCell colSpan={3} align="center" sx={{ color: "text.secondary" }}>
+            No data yet.
+          </TableCell>
+        </TableRow>
+      );
+    }
+    return rows.map((c) => (
+      <TableRow key={c.name}>
+        <TableCell>{c.name}</TableCell>
+        <TableCell align="right">{c.count}</TableCell>
+        <TableCell align="right">{currency.format(c.total)}</TableCell>
+      </TableRow>
+    ));
+  }
+
   return (
     <Paper sx={{ p: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -169,6 +159,8 @@ export default function Admin() {
 
       {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
       {loading && <Alert severity="info" sx={{ mt: 2 }}>Loading...</Alert>}
+
+      {/* platform KPIs */}
       <Box
         sx={{
           display: "grid",
@@ -179,28 +171,28 @@ export default function Admin() {
       >
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="body2" color="text.secondary">Transactions</Typography>
-            <Typography variant="h6">{expenses.length}</Typography>
+            <Typography variant="body2" color="text.secondary">Registered users</Typography>
+            <Typography variant="h6">{insights?.totalUsers ?? "—"}</Typography>
           </CardContent>
         </Card>
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="body2" color="text.secondary">Total amount</Typography>
-            <Typography variant="h6">{currency.format(totalAmount)}</Typography>
+            <Typography variant="body2" color="text.secondary">Expenses recorded</Typography>
+            <Typography variant="h6">{insights?.totalExpenses ?? "—"}</Typography>
           </CardContent>
         </Card>
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="body2" color="text.secondary">Average expense</Typography>
+            <Typography variant="body2" color="text.secondary">Total value</Typography>
             <Typography variant="h6">
-              {expenses.length > 0 ? currency.format(average) : "—"}
+              {insights ? currency.format(insights.totalValue) : "—"}
             </Typography>
           </CardContent>
         </Card>
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="body2" color="text.secondary">Categories</Typography>
-            <Typography variant="h6">{categories.length}</Typography>
+            <Typography variant="body2" color="text.secondary">This month</Typography>
+            <Typography variant="h6">{insights?.monthExpenses ?? "—"}</Typography>
           </CardContent>
         </Card>
       </Box>
@@ -209,7 +201,7 @@ export default function Admin() {
         {/* spending by category */}
         <Card variant="outlined">
           <CardContent>
-            <Typography variant="h6" gutterBottom>Category insights</Typography>
+            <Typography variant="h6" gutterBottom>Spending by category</Typography>
             <TableContainer>
               <Table size="small">
                 <TableHead>
@@ -221,7 +213,7 @@ export default function Admin() {
                 </TableHead>
                 <TableBody>
                   {perCategory.map((c) => (
-                    <TableRow key={c.catId}>
+                    <TableRow key={c.name}>
                       <TableCell>
                         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
                           <span>{c.name}</span>
@@ -238,7 +230,7 @@ export default function Admin() {
                   ))}
                   {perCategory.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={3} align="center" color="text.secondary">
+                      <TableCell colSpan={3} align="center" sx={{ color: "text.secondary" }}>
                         No expenses yet.
                       </TableCell>
                     </TableRow>
@@ -274,7 +266,9 @@ export default function Admin() {
                             <EditIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title={category.isDefault ? "Default categories cannot be deleted" : "Delete"}>
+                        <Tooltip
+                          title={category.isDefault ? "Default categories cannot be deleted" : "Delete"}
+                        >
                           <span>
                             <IconButton
                               size="small"
@@ -294,7 +288,112 @@ export default function Admin() {
             </TableContainer>
           </CardContent>
         </Card>
+
+        {/* top / bottom categories */}
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Top 5 categories</Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Category</TableCell>
+                    <TableCell align="right">Count</TableCell>
+                    <TableCell align="right">Total</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{usageRows(insights?.topCategories ?? [])}</TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Bottom 5 categories</Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Category</TableCell>
+                    <TableCell align="right">Count</TableCell>
+                    <TableCell align="right">Total</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{usageRows(insights?.bottomCategories ?? [])}</TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
+
+        {/* recent activity */}
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Recent expenses</Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Title</TableCell>
+                    <TableCell align="right">Date</TableCell>
+                    <TableCell align="right">Amount</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(insights?.recentExpenses ?? []).map((ex) => (
+                    <TableRow key={ex._id}>
+                      <TableCell>{ex.title}</TableCell>
+                      <TableCell align="right">{shortDate(ex.date)}</TableCell>
+                      <TableCell align="right">{currency.format(ex.amount)}</TableCell>
+                    </TableRow>
+                  ))}
+                  {(insights?.recentExpenses.length ?? 0) === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={3} align="center" sx={{ color: "text.secondary" }}>
+                        No expenses yet.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
+
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>Recently registered users</Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell align="right">Email</TableCell>
+                    <TableCell align="right">Joined</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {(insights?.recentUsers ?? []).map((u) => (
+                    <TableRow key={u._id}>
+                      <TableCell>{u.name}</TableCell>
+                      <TableCell align="right">{u.email}</TableCell>
+                      <TableCell align="right">{shortDate(u.createdAt)}</TableCell>
+                    </TableRow>
+                  ))}
+                  {(insights?.recentUsers.length ?? 0) === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={3} align="center" sx={{ color: "text.secondary" }}>
+                        No users yet.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
       </Box>
+
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth="xs">
         <DialogTitle>{editing ? "Edit category" : "Add category"}</DialogTitle>
         <DialogContent>

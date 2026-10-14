@@ -5,7 +5,7 @@ import { env } from "../config/env";
 import { User } from "../models/User";
 
 // verify 
-export async function requireAdmin(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function requireAdmin(_req: Request, res: Response, next: NextFunction): Promise<void> {
   const userId = res.locals.userId as string | undefined;
   if (!userId) {
     res.status(401).json({ message: "Missing authorization header" });

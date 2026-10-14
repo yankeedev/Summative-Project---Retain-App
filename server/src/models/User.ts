@@ -7,6 +7,8 @@ export interface UserDoc {
   email: string;
   password: string;
   role: (typeof ROLES)[number];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<UserDoc>(
