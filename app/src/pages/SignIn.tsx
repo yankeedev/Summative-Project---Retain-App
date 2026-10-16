@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { AccountBalanceWallet as WalletIcon } from "@mui/icons-material";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -43,22 +42,6 @@ export default function SignIn() {
     <Box sx={{ maxWidth: 420, mx: "auto", mt: { xs: 4, sm: 8 }, px: 2 }}>
       {/* Brand header */}
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 3 }}>
-        <Box
-          sx={{
-            width: 48,
-            height: 48,
-            borderRadius: "14px",
-            background: "linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#fff",
-            boxShadow: "0 8px 18px -4px rgba(79, 70, 229, 0.4)",
-            mb: 1.5,
-          }}
-        >
-          <WalletIcon sx={{ fontSize: 28 }} />
-        </Box>
         <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: "-0.02em" }}>
           Retain
         </Typography>
