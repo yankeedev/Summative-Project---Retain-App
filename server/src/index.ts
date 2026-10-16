@@ -1,8 +1,20 @@
 import { createApp } from "./app";
+import { connectDb } from "./config/db";
 import { env } from "./config/env";
 
-const app = createApp();
+async function start(): Promise<void> {
+  try {
+    await connectDb();
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
+  }
 
-app.listen(env.port, () => {
-  console.log(`Retain API listening on http://localhost:${env.port} (${env.nodeEnv})`);
-});
+  const app = createApp();
+  app.listen(env.port, () => {
+    console.log(`Retain API listening on http://localhost:${env.port} (${env.nodeEnv})`);
+  });
+}
+
+void start();
