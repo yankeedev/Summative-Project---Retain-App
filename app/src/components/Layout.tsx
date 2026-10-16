@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  AccountBalanceWallet as WalletIcon,
   AdminPanelSettingsOutlined as AdminIcon,
   DashboardOutlined as DashboardIcon,
   LogoutOutlined as LogoutIcon,
@@ -67,28 +66,15 @@ export default function Layout() {
               }}
             >
               <Box
+                component="img"
+                src="/wallet.svg"
+                alt="Retain logo"
                 sx={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: "10px",
-                  background: "linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                  boxShadow: "0 4px 10px -2px rgba(79, 70, 229, 0.4)",
+                  width: 36,
+                  height: 36,
+                  mr: 1.25,
                 }}
-              >
-                <WalletIcon sx={{ fontSize: 22 }} />
-              </Box>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-                  Retain
-                </Typography>
-                <Typography variant="caption" sx={{ color: "text.secondary", fontSize: "0.68rem", fontWeight: 600 }}>
-                  EXPENSE & BUDGET
-                </Typography>
-              </Box>
+              />
             </Box>
 
             {/* Navigation links */}
