@@ -7,6 +7,13 @@ const app = createApp();
 let handler: any;
 
 export default async (req: any, res: any) => {
+  // Strip Vercel's /api prefix if present so Express matches routes correctly
+  if (req.url && req.url.startsWith("/api/")) {
+    req.url = req.url.replace(/^\/api/, "") || "/";
+  } else if (req.url === "/api") {
+    req.url = "/";
+  }
+
   if (mongoose.connection.readyState === 0) {
     try {
       await connectDb();
