@@ -3,6 +3,10 @@ import { connectDb } from "./config/db";
 import { env } from "./config/env";
 
 async function start(): Promise<void> {
+  if (process.env.VERCEL) {
+    return;
+  }
+
   try {
     await connectDb();
     console.log("Connected to MongoDB");
