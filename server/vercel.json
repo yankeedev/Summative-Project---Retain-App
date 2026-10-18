@@ -1,15 +1,16 @@
 {
   "version": 2,
   "outputDirectory": ".",
-  "functions": {
-    "api/index.ts": {
-      "maxDuration": 10
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/api/index"
+      "dest": "dist/index.js"
     }
   ]
 }
