@@ -31,9 +31,9 @@ const currency = new Intl.NumberFormat("en-US", {
 });
 
 function categoryName(expense: Expense): string {
-  return typeof expense.category === "string"
-    ? expense.category
-    : expense.category.name;
+  const category = expense.category;
+  if (!category) return "Uncategorized";
+  return typeof category === "string" ? category : category.name;
 }
 
 export default function Expenses() {

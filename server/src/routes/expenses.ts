@@ -48,7 +48,8 @@ router.get("/", async (req, res) => {
   const data = await Expense.find(filter)
     .sort({ [sortBy]: order })
     .skip((safePage - 1) * limit)
-    .limit(limit);
+    .limit(limit)
+    .populate("category", "name isDefault");
 
   res.json({ data, total, page: safePage, pages, limit });
 });
@@ -68,6 +69,7 @@ router.post("/", async (req, res) => {
     paymentMethod,
     notes,
   });
+  await expense.populate("category", "name isDefault");
   res.status(201).json(expense);
 });
 
@@ -76,7 +78,7 @@ router.put("/:id", async (req, res) => {
     { _id: req.params.id, userId: res.locals.userId },
     req.body,
     { new: true, runValidators: true }
-  );
+  ).populate("category", "name isDefault");
   if (!expense) {
     res.status(404).json({ message: "Expense not found" });
     return;
