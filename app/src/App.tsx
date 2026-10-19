@@ -8,6 +8,7 @@ import Budget from "./pages/Budget";
 import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/budget" element={<Budget />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
 
