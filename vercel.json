@@ -1,7 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm --prefix app ci",
-  "buildCommand": "npm --prefix app run build",
-  "outputDirectory": "app/dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api", "destination": "https://summative-project-retain-app-production.up.railway.app/api" },
+    { "source": "/api/(.*)", "destination": "https://summative-project-retain-app-production.up.railway.app/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
