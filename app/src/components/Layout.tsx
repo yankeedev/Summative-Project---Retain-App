@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import {
   AdminPanelSettingsOutlined as AdminIcon,
+  BarChartOutlined as AnalyticsIcon,
   DashboardOutlined as DashboardIcon,
   LogoutOutlined as LogoutIcon,
-  PersonOutlineOutlined as ProfileIcon,
   ReceiptLongOutlined as ExpensesIcon,
   SavingsOutlined as BudgetIcon,
 } from "@mui/icons-material";
@@ -33,7 +33,7 @@ export default function Layout() {
     { label: "Dashboard", to: "/dashboard", icon: <DashboardIcon fontSize="small" /> },
     { label: "Expenses", to: "/expenses", icon: <ExpensesIcon fontSize="small" /> },
     { label: "Budget", to: "/budget", icon: <BudgetIcon fontSize="small" /> },
-    { label: "Profile", to: "/profile", icon: <ProfileIcon fontSize="small" /> },
+    { label: "Analytics", to: "/analytics", icon: <AnalyticsIcon fontSize="small" /> },
     ...(user?.role === "admin"
       ? [{ label: "Admin", to: "/admin", icon: <AdminIcon fontSize="small" /> }]
       : []),
@@ -116,7 +116,7 @@ export default function Layout() {
                 component={Link}
                 to="/profile"
                 sx={{
-                  display: { xs: "none", sm: "flex" },
+                  display: "flex",
                   alignItems: "center",
                   gap: 1,
                   textDecoration: "none",
@@ -138,7 +138,7 @@ export default function Layout() {
                 >
                   {user?.name ? user.name[0].toUpperCase() : "U"}
                 </Avatar>
-                <Box sx={{ textAlign: "left" }}>
+                <Box sx={{ textAlign: "left", display: { xs: "none", sm: "block" } }}>
                   <Typography variant="body2" sx={{ fontWeight: 600, lineHeight: 1.1 }}>
                     {user?.name ?? "User"}
                   </Typography>
