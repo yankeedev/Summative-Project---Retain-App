@@ -1,0 +1,12 @@
+XHR POST
+https://summative-project-retain-app.vercel.app/api/auth/signin
+[HTTP/2 405  388ms]
+XML Parsing Error: no root element found
+Location: https://summative-project-retain-app.vercel.app/api/auth/signin
+Line Number 1, Column 1: signin:1:1
+XHR POST
+https://summative-project-retain-app.vercel.app/api/auth/signin
+[HTTP/2 405  380ms]
+XML Parsing Error: no root element found
+Location: https://summative-project-retain-app.vercel.app/api/auth/signin
+Line Number 1, Column 1: signin:1:1

@@ -1,0 +1,10 @@
+2026-10-18T23:16:58.898534174Z [inf]  Starting Container
+2026-10-18T23:16:59.076314606Z [err]  npm warn config production Use `--omit=dev` instead.
+2026-10-18T23:16:59.076323616Z [inf]  
+2026-10-18T23:16:59.076328666Z [inf]  > retain-server@1.0.0 start
+2026-10-18T23:16:59.076334186Z [inf]  > node dist/index.js
+2026-10-18T23:16:59.076338596Z [inf]  
+2026-10-18T23:16:59.076343306Z [err]  ◇ injected env (0) from .env
+2026-10-18T23:17:01.608664062Z [inf]  Connected to MongoDB
+2026-10-18T23:17:01.608669702Z [inf]  Retain API listening on http://localhost:8080 (production)
+2026-10-18T23:17:01.608672792Z [inf]  Allowed client origins: https://summative-project-retain-app.vercel.app/api/auth/signin, http://localhost:5000/api/auth/signin, http://localhost:5173, http://localhost:5174, https://summative-project-retain-app.vercel.app

@@ -12,6 +12,14 @@ backend is a **Node.js + Express REST API written in TypeScript** with
 **MongoDB** for persistence. The frontend talks to the backend API for all
 data (auth, expenses, budgets, categories, dashboards).
 
+## Live Application
+
+- **Frontend (Vercel):** https://summative-project-retain-app.vercel.app
+- **Backend API (Railway):** https://summative-project-retain-app-production.up.railway.app
+  — health check at `/api/health`
+
+Sign in with the seeded demo accounts below, or create a new account.
+
 ## Video Demo
 
 **Live demo video:** `https://your-video-demo-link-here`
@@ -98,6 +106,25 @@ Seeded demo accounts:
 | `npm run typecheck` | Type-check without emitting |
 | `npm test` | Run the node test suite |
 
+## Deployment
+
+The app runs as two deployed services:
+
+| Service | Platform | Notes |
+| --- | --- | --- |
+| Frontend | Vercel | Root Directory `app`; static Vite build. `/api/*` is rewritten to the Railway API (`app/vercel.json`) so the browser makes same-origin requests |
+| API | Railway | Root `server`; `npm run build` then `npm start` |
+
+Environment variables:
+
+| Variable | Where | Purpose |
+| --- | --- | --- |
+| `MONGO_URI` | Railway | MongoDB Atlas connection string |
+| `JWT_SECRET` | Railway | Token signing secret |
+| `JWT_EXPIRES_IN` | Railway | Optional token lifetime (default `7d`) |
+| `CLIENT_ORIGIN` | Railway | Comma-separated allowed frontend origins (CORS) |
+| `VITE_API_URL` | Vercel | API base URL for the browser (set to `/api` to use the rewrite) |
+
 ## Feature Highlights
 
 - Create, view, update, and delete expenses (title, amount, category, date,
@@ -108,10 +135,13 @@ Seeded demo accounts:
   within / approaching / over status
 - User dashboard: total spending for the month, remaining budget, highest
   expense, spending by category, and recent expenses
+- Analytics page: month picker, 6-month spending trend, spending-by-category
+  donut, payment-method breakdown, and top 5 largest expenses
 - Admin dashboard: category management (with safe reassignment to a default
   category) and platform insights (user/expense counts, total value, spend per
   category, top/bottom 5 categories, recent expenses and users)
 - Authentication via React Context with protected routes and role-based access
+- Profile management: view account details and change password / delete account
 
 ## API Overview (backend)
 
