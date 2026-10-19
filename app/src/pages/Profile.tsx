@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Chip,
@@ -13,6 +14,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { changePassword, deleteAccount } from "../services/endpoints";
+
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 export default function Profile() {
   const { user, signOut } = useAuth();
@@ -92,26 +102,31 @@ export default function Profile() {
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
           Account
         </Typography>
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "auto 1fr" }, gap: 1.5, alignItems: "center" }}>
-          <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-            Name
-          </Typography>
-          <Typography variant="body1">{user.name}</Typography>
-
-          <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-            Email
-          </Typography>
-          <Typography variant="body1">{user.email}</Typography>
-
-          <Typography variant="body2" sx={{ color: "text.secondary", fontWeight: 600 }}>
-            Role
-          </Typography>
-          <Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2.5, flexWrap: "wrap" }}>
+          <Avatar
+            alt={user.name}
+            sx={{
+              width: 64,
+              height: 64,
+              fontWeight: 700,
+              fontSize: 24,
+              bgcolor: "primary.main",
+            }}
+          >
+            {initials(user.name)}
+          </Avatar>
+          <Box sx={{ minWidth: 0 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              {user.name}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {user.email}
+            </Typography>
             <Chip
               label={user.role}
               color={user.role === "admin" ? "primary" : "default"}
               size="small"
-              sx={{ fontWeight: 700, textTransform: "capitalize" }}
+              sx={{ fontWeight: 700, textTransform: "capitalize", mt: 1 }}
             />
           </Box>
         </Box>
