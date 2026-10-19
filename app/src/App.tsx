@@ -8,16 +8,17 @@ import Budget from "./pages/Budget";
 import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Admin from "./pages/Admin";
+import Landing from "./pages/Landing";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<Landing />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/budget" element={<Budget />} />
