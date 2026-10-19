@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Box,
@@ -18,8 +18,8 @@ import {
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getBudget, listCategories, listExpenses } from "../services/mockApi";
-import type { Budget, Category, Expense, PaymentMethod } from "../types";
+import { getDashboard } from "../services/endpoints";
+import type { DashboardSummary, PaymentMethod } from "../types";
 
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -38,12 +38,6 @@ const CATEGORY_COLORS = [
   "#64748b", // Slate
 ];
 
-function monthBounds(month: string): [string, string] {
-  const [year, mon] = month.split("-").map(Number);
-  const lastDay = new Date(year, mon, 0).getDate();
-  return [`${month}-01`, `${month}-${String(lastDay).padStart(2, "0")}`];
-}
-
 function paymentIcon(method: PaymentMethod) {
   switch (method) {
     case "card":
@@ -58,9 +52,7 @@ function paymentIcon(method: PaymentMethod) {
 export default function Dashboard() {
   const { user } = useAuth();
   const [month] = useState(() => new Date().toISOString().slice(0, 7));
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [budget, setBudget] = useState<Budget | null>(null);
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,27 +61,7 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [from, to] = monthBounds(month);
-      const [expensePage, cats, b] = await Promise.all([
-        listExpenses({
-          search: "",
-          category: "all",
-          paymentMethod: "all",
-          dateFrom: from,
-          dateTo: to,
-          minAmount: "",
-          maxAmount: "",
-          sortBy: "date",
-          order: "desc",
-          page: 1,
-          limit: 50,
-        }),
-        listCategories(),
-        getBudget(user._id, month),
-      ]);
-      setExpenses(expensePage.data);
-      setCategories(cats);
-      setBudget(b);
+      setSummary(await getDashboard(month));
     } catch {
       setError("Could not load dashboard");
     } finally {
@@ -101,31 +73,13 @@ export default function Dashboard() {
     void load();
   }, [user, month]);
 
-  const totalSpent = expenses.reduce((sum, ex) => sum + ex.amount, 0);
-
-  const topExpense = expenses.reduce<Expense | null>(
-    (best, ex) => (best && best.amount >= ex.amount ? best : ex),
-    null
-  );
-
-  const avgExpense = expenses.length > 0 ? totalSpent / expenses.length : 0;
-
-  // Group spending by category
-  const byCategory = useMemo(() => {
-    const map = new Map<string, { id: string; name: string; total: number; count: number }>();
-    for (const ex of expenses) {
-      const id = typeof ex.category === "string" ? ex.category : ex.category._id;
-      const name =
-        typeof ex.category === "string"
-          ? (categories.find((c) => c._id === id)?.name ?? "Other")
-          : ex.category.name;
-      const current = map.get(id) ?? { id, name, total: 0, count: 0 };
-      current.total += ex.amount;
-      current.count += 1;
-      map.set(id, current);
-    }
-    return [...map.values()].sort((a, b) => b.total - a.total);
-  }, [expenses, categories]);
+  const totalSpent = summary?.totalSpent ?? 0;
+  const expenseCount = summary?.count ?? 0;
+  const avgExpense = summary?.avgAmount ?? 0;
+  const topExpense = summary?.highest ?? null;
+  const byCategory = summary?.byCategory ?? [];
+  const recent = summary?.recent ?? [];
+  const budget = summary?.budget ?? null;
 
   const richestCategory = byCategory[0]?.total ?? 0;
   const percentOfBudget =
@@ -271,7 +225,7 @@ export default function Dashboard() {
               Transactions
             </Typography>
             <Typography variant="h4" sx={{ fontWeight: 700, letterSpacing: "-0.02em", mb: 0.5 }}>
-              {expenses.length}
+              {expenseCount}
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary" }}>
               Avg. {currency.format(avgExpense)} / transaction
@@ -336,7 +290,7 @@ export default function Dashboard() {
                   const color = CATEGORY_COLORS[idx % CATEGORY_COLORS.length];
 
                   return (
-                    <Box key={cat.id}>
+                    <Box key={cat.categoryId}>
                       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.75 }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                           <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: color }} />
@@ -437,13 +391,13 @@ export default function Dashboard() {
               </Button>
             </Box>
 
-            {expenses.length === 0 ? (
+            {recent.length === 0 ? (
               <Box sx={{ py: 6, textAlign: "center", color: "text.secondary" }}>
                 <Typography variant="body2">No recent activity found.</Typography>
               </Box>
             ) : (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
-                {expenses.slice(0, 6).map((ex) => (
+                {recent.map((ex) => (
                   <Box
                     key={ex._id}
                     sx={{

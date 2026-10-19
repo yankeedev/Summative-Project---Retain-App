@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { listExpenses } from "../services/mockApi";
+import { listExpenses } from "../services/endpoints";
 import type {
   Expense,
   ExpenseFilters,

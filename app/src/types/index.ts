@@ -82,3 +82,28 @@ export interface AdminInsights {
   recentExpenses: Expense[];
   recentUsers: User[];
 }
+
+export interface DashboardCategory {
+  categoryId: string;
+  name: string;
+  total: number;
+  count: number;
+}
+
+export interface DashboardBudget {
+  amount: number;
+  spent: number;
+  remaining: number;
+  status: "within" | "approaching" | "over";
+}
+
+export interface DashboardSummary {
+  month: string;
+  totalSpent: number;
+  count: number;
+  avgAmount: number;
+  highest: Expense | null;
+  byCategory: DashboardCategory[];
+  recent: Expense[];
+  budget: DashboardBudget | null;
+}

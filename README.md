@@ -9,8 +9,8 @@ categories and viewing platform-wide insights.
 
 Built as a summative project. Frontend is **React + TypeScript + Vite**; the
 backend is a **Node.js + Express REST API written in TypeScript** with
-**MongoDB** for persistence, and the frontend currently runs against a mock
-data layer that will be swapped for real API calls.
+**MongoDB** for persistence. The frontend talks to the backend API for all
+data (auth, expenses, budgets, categories, dashboards).
 
 ## Video Demo
 
@@ -21,12 +21,12 @@ data layer that will be swapped for real API calls.
 ## Technologies Used
 
 ### Frontend (`app/`)
-- **React 19** with **TypeScript** (strict mode, `verbatimModuleSyntax`)
+- **React 19** with **TypeScript** (`verbatimModuleSyntax`)
 - **Vite** — build tool and dev server
 - **Material-UI (MUI)** — component library and responsive layout
 - **React Router v7** — routing and protected routes
 - **Redux Toolkit + React Redux** — search, filtering, and sorting state
-- **Axios** — HTTP client (used when the real API is wired up)
+- **Axios** — HTTP client for the backend API
 - **React Context** — authentication (sign up / sign in / sign out, user roles)
 
 ### Backend (`server/`)
@@ -52,21 +52,7 @@ retain-app/
 - Node.js 20+ and npm
 - (Backend only) a MongoDB Atlas connection string — see `server/.env.example`
 
-### 1. Frontend (requires nothing else — uses mock data)
-
-```powershell
-cd app
-npm install
-npm run dev
-```
-
-Open http://localhost:5173 in your browser.
-
-Demo accounts (mock auth):
-- Admin: `admin@retain.app` / `password`
-- User: `demo@retain.app` / `password`
-
-### 2. Backend (optional for now)
+### 1. Backend (required)
 
 ```powershell
 cd server
@@ -76,6 +62,23 @@ npm run dev
 ```
 
 The API runs at http://localhost:5000 — `GET /health` returns `{ "status": "ok" }`.
+
+### 2. Frontend (requires the backend + database)
+
+```powershell
+cd app
+npm install
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+Set `VITE_API_URL` in `app/.env` if the API is not on `http://localhost:5000/api`
+(see `app/.env.example`).
+
+Seeded demo accounts:
+- Admin: `admin@retain.app` / `password`
+- User: `demo@retain.app` / `password`
 
 ## Scripts
 
@@ -93,6 +96,7 @@ The API runs at http://localhost:5000 — `GET /health` returns `{ "status": "ok
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm run start` | Run the compiled server |
 | `npm run typecheck` | Type-check without emitting |
+| `npm test` | Run the node test suite |
 
 ## Feature Highlights
 
@@ -109,17 +113,19 @@ The API runs at http://localhost:5000 — `GET /health` returns `{ "status": "ok
   category, top/bottom 5 categories, recent expenses and users)
 - Authentication via React Context with protected routes and role-based access
 
-## API Overview (planned/backend)
+## API Overview (backend)
 
 | Method | Endpoint | Description | Access |
 | --- | --- | --- | --- |
-| POST | `/api/auth/register` | Create an account | Public |
-| POST | `/api/auth/login` | Log in, returns a JWT | Public |
-| GET/POST/PATCH/DELETE | `/api/expenses` | Expense CRUD + filtering | Authenticated |
+| POST | `/api/auth/signup` | Create an account | Public |
+| POST | `/api/auth/signin` | Log in, returns a JWT | Public |
+| PUT | `/api/auth/password` | Change your password | Authenticated |
+| DELETE | `/api/auth/account` | Delete account + all its data | Authenticated |
+| GET/POST/PUT/DELETE | `/api/expenses` | Expense CRUD + filtering | Authenticated |
 | GET/PUT | `/api/budgets/:month` | Read/update monthly budget | Authenticated |
 | GET | `/api/categories` | List categories | Authenticated |
-| POST/PATCH/DELETE | `/api/categories/:id` | Manage categories | Admin |
-| GET | `/api/dashboard?month=` | User spending summary | Authenticated |
+| POST/PUT/DELETE | `/api/categories/:id` | Manage categories | Admin |
+| GET | `/api/dashboard?month=YYYY-MM` | User spending summary | Authenticated |
 | GET | `/api/admin/insights` | Platform insights | Admin |
 
 ## Contributing / Ownership

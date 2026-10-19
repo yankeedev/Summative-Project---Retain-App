@@ -22,7 +22,7 @@ import ExpenseFilters from "../components/ExpenseFilters";
 import ExpenseForm from "../components/ExpenseForm";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchExpenses, setLimit, setPage } from "../store/expensesSlice";
-import { deleteExpense } from "../services/mockApi";
+import { deleteExpense } from "../services/endpoints";
 import type { Expense } from "../types";
 
 const currency = new Intl.NumberFormat("en-US", {

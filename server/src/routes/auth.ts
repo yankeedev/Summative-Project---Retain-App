@@ -2,6 +2,9 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
+import { requireAuth } from "../middleware/auth";
+import { Budget } from "../models/budget";
+import { Expense } from "../models/expense";
 import { User } from "../models/user";
 
 const router = Router();
@@ -46,4 +49,39 @@ router.post("/signin", async (req, res) => {
   }
   res.json({ token: signToken(user.id), user: publicUser(user) });
 });
+
+router.put("/password", requireAuth, async (req, res) => {
+  const { currentPassword, newPassword } = req.body ?? {};
+  if (!currentPassword || !newPassword) {
+    res.status(400).json({ message: "Current and new password are required" });
+    return;
+  }
+  if (String(newPassword).length < 6) {
+    res.status(400).json({ message: "New password must be at least 6 characters" });
+    return;
+  }
+  const user = await User.findById(res.locals.userId);
+  if (!user) {
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+  if (!(await bcrypt.compare(String(currentPassword), user.password))) {
+    res.status(401).json({ message: "Current password is incorrect" });
+    return;
+  }
+  user.password = await bcrypt.hash(String(newPassword), 10);
+  await user.save();
+  res.json({ message: "Password updated" });
+});
+
+router.delete("/account", requireAuth, async (_req, res) => {
+  const userId = res.locals.userId;
+  await Promise.all([
+    Expense.deleteMany({ userId }),
+    Budget.deleteMany({ userId }),
+    User.deleteOne({ _id: userId }),
+  ]);
+  res.status(204).end();
+});
+
 export default router;

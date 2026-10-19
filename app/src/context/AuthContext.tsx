@@ -1,10 +1,12 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from "react";
-import { signIn as apiSignIn, signUp as apiSignUp } from "../services/mockApi";
+import { signIn as apiSignIn, signUp as apiSignUp } from "../services/endpoints";
+import { setUnauthorizedHandler } from "../services/api";
 import type { User } from "../types";
 
 interface AuthContextValue {
@@ -78,6 +80,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     setUser(null);
   }
+
+  // Expired/invalid token: clear the session and return to the sign-in page
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      if (window.location.pathname.startsWith("/signin")) {
+        setToken(null);
+        setUser(null);
+      } else {
+        window.location.assign("/signin");
+      }
+    });
+  }, []);
 
  
   return (

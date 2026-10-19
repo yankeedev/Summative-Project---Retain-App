@@ -12,6 +12,7 @@ import {
   AdminPanelSettingsOutlined as AdminIcon,
   DashboardOutlined as DashboardIcon,
   LogoutOutlined as LogoutIcon,
+  PersonOutlineOutlined as ProfileIcon,
   ReceiptLongOutlined as ExpensesIcon,
   SavingsOutlined as BudgetIcon,
 } from "@mui/icons-material";
@@ -32,6 +33,7 @@ export default function Layout() {
     { label: "Dashboard", to: "/dashboard", icon: <DashboardIcon fontSize="small" /> },
     { label: "Expenses", to: "/expenses", icon: <ExpensesIcon fontSize="small" /> },
     { label: "Budget", to: "/budget", icon: <BudgetIcon fontSize="small" /> },
+    { label: "Profile", to: "/profile", icon: <ProfileIcon fontSize="small" /> },
     ...(user?.role === "admin"
       ? [{ label: "Admin", to: "/admin", icon: <AdminIcon fontSize="small" /> }]
       : []),
@@ -110,7 +112,21 @@ export default function Layout() {
 
             {/* User profile & actions */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", gap: 1 }}>
+              <Box
+                component={Link}
+                to="/profile"
+                sx={{
+                  display: { xs: "none", sm: "flex" },
+                  alignItems: "center",
+                  gap: 1,
+                  textDecoration: "none",
+                  color: "inherit",
+                  p: 0.75,
+                  mr: 0.5,
+                  borderRadius: "10px",
+                  "&:hover": { bgcolor: "rgba(241, 245, 249, 0.9)" },
+                }}
+              >
                 <Avatar
                   sx={{
                     width: 34,

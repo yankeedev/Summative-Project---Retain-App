@@ -6,6 +6,7 @@ import { env, isAllowedOrigin } from "./config/env";
 import authRouter from "./routes/auth";
 import budgetsRouter from "./routes/budgets";
 import categoriesRouter from "./routes/categories";
+import dashboardRouter from "./routes/dashboard";
 import expensesRouter from "./routes/expenses";
 import adminRouter from "./routes/admin";
 export function createApp(): express.Express {
@@ -39,6 +40,7 @@ export function createApp(): express.Express {
   app.use("/api/categories", categoriesRouter);
   app.use("/api/expenses", expensesRouter);
   app.use("/api/budgets", budgetsRouter);
+  app.use("/api/dashboard", dashboardRouter);
   app.use("/api/admin", adminRouter);
   return app;
 }

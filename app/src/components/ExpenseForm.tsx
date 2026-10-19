@@ -13,7 +13,7 @@ import {
   createExpense,
   listCategories,
   updateExpense,
-} from "../services/mockApi";
+} from "../services/endpoints";
 import type { Category, Expense, PaymentMethod } from "../types";
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);

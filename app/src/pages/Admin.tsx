@@ -33,7 +33,7 @@ import {
   getAdminInsights,
   listCategories,
   updateCategory,
-} from "../services/mockApi";
+} from "../services/endpoints";
 import type { AdminInsights, Category, CategoryUsage } from "../types";
 
 const currency = new Intl.NumberFormat("en-US", {

@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
-import { getBudget, upsertBudget } from "../services/mockApi";
+import { getBudget, upsertBudget } from "../services/endpoints";
 import type { Budget } from "../types";
 
 const currency = new Intl.NumberFormat("en-US", {

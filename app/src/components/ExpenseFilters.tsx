@@ -5,7 +5,7 @@ import {
   MenuItem,
   TextField,
 } from "@mui/material";
-import { listCategories } from "../services/mockApi";
+import { listCategories } from "../services/endpoints";
 import { useAppDispatch, useAppSelector } from "../store";
 import {
   resetFilters,

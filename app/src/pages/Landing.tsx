@@ -191,9 +191,6 @@ export default function Landing() {
         <Typography variant="h6" sx={{ color: "text.secondary", fontWeight: 400, mt: 1 }}>
           Work out where your money is going
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary", mt: 1.5 }}>
-          Page reading time: 2 minutes · Last updated: October 2026
-        </Typography>
 
         {/* On this page */}
         <Paper sx={{ p: 2.5, mt: 4, bgcolor: "#f8fafc" }}>
