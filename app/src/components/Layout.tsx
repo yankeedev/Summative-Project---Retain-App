@@ -346,12 +346,14 @@ export default function Layout() {
               <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.2 }}>
                 {pageTitle}
               </Typography>
-              <Typography
-                variant="subtitle2"
-                sx={{ fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}
-              >
-                {monthLabel}
-              </Typography>
+              {location.pathname.startsWith("/dashboard") && (
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}
+                >
+                  {monthLabel}
+                </Typography>
+              )}
             </Box>
 
             <Chip
