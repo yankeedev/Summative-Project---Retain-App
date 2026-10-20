@@ -421,57 +421,47 @@ export default function Landing() {
       </Box>
 
       {/* Footer */}
-      <Box sx={{ borderTop: "1px solid", borderColor: "divider", bgcolor: "#fff", mt: 4 }}>
-        <Container maxWidth="lg" sx={{ py: 5 }}>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", sm: "repeat(4, 1fr)" },
-              gap: 3,
-            }}
-          >
-            <Box>
-              <Stack direction="row" spacing={1} sx={{ mb: 1.5, alignItems: "center" }}>
-                <Box component="img" src="/wallet.svg" alt="" sx={{ width: 22, height: 22 }} />
-                <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
-                  Retain
-                </Typography>
-              </Stack>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                A personal expense and budget manager that helps you work out where your money
-                is going.
-              </Typography>
-            </Box>
+      <Box sx={{ borderTop: "1px solid", borderColor: "divider", bgcolor: "#fff", mt: 3 }}>
+        <Container
+          maxWidth="lg"
+          sx={{
+            py: 2,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            gap: 1.5,
+          }}
+        >
+          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <Box component="img" src="/wallet.svg" alt="" sx={{ width: 20, height: 20 }} />
+            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+              Retain
+            </Typography>
+          </Stack>
 
-            <FooterColumn
-              title="Product"
-              links={[
-                { label: "Dashboard", to: "/dashboard" },
-                { label: "Expenses", to: "/expenses" },
-                { label: "Budget", to: "/budget" },
-              ]}
-            />
-            <FooterColumn
-              title="Account"
-              links={[
-                { label: "Sign in", to: "/signin" },
-                { label: "Create an account", to: "/signup" },
-              ]}
-            />
-            <Box>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-                About
+          <Stack direction="row" spacing={2.5} sx={{ flexWrap: "wrap", rowGap: 0.5 }}>
+            {[
+              { label: "Dashboard", to: "/dashboard" },
+              { label: "Expenses", to: "/expenses" },
+              { label: "Budget", to: "/budget" },
+              { label: "Sign in", to: "/signin" },
+              { label: "Sign up", to: "/signup" },
+            ].map((link) => (
+              <Typography
+                key={link.to}
+                component={RouterLink}
+                to={link.to}
+                variant="body2"
+                sx={{ color: "text.secondary", textDecoration: "none", "&:hover": { color: "primary.main" } }}
+              >
+                {link.label}
               </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                Built with React, TypeScript, Redux and Express. Source code and setup
-                instructions are in the GitHub repository.
-              </Typography>
-            </Box>
-          </Box>
+            ))}
+          </Stack>
 
-          <Divider sx={{ my: 3 }} />
           <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            © 2026 Retain. Personal Expense & Budget Manager.
+            © 2026 Retain
           </Typography>
         </Container>
       </Box>
@@ -494,32 +484,3 @@ const bodyCell = {
   fontSize: "0.9375rem",
   borderBottom: "1px solid #f1f5f9",
 } as const;
-
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; to: string }[];
-}) {
-  return (
-    <Box>
-      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-        {title}
-      </Typography>
-      <Stack spacing={1}>
-        {links.map((link) => (
-          <Typography
-            key={link.to + link.label}
-            component={RouterLink}
-            to={link.to}
-            variant="body2"
-            sx={{ color: "text.secondary", textDecoration: "none", "&:hover": { color: "primary.main" } }}
-          >
-            {link.label}
-          </Typography>
-        ))}
-      </Stack>
-    </Box>
-  );
-}
