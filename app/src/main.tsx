@@ -3,22 +3,22 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import App from "./App";
 import { store } from "./store";
 import { AuthProvider } from "./context/AuthContext";
-import { theme } from "./theme";
+import { ColorModeProvider } from "./context/ColorModeContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
+        <ColorModeProvider>
           <CssBaseline />
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </ThemeProvider>
+        </ColorModeProvider>
       </AuthProvider>
     </Provider>
   </StrictMode>
