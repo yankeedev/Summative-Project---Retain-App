@@ -49,14 +49,16 @@ export const theme = createTheme({
       "Arial",
       "sans-serif",
     ].join(","),
+    fontSize: 14.25,
+    htmlFontSize: 16,
     h4: {
       fontWeight: 700,
-      letterSpacing: "-0.02em",
+      letterSpacing: "-0.025em",
       color: "#0f172a",
     },
     h5: {
-      fontWeight: 600,
-      letterSpacing: "-0.01em",
+      fontWeight: 650,
+      letterSpacing: "-0.015em",
       color: "#0f172a",
     },
     h6: {
@@ -67,9 +69,17 @@ export const theme = createTheme({
     subtitle1: {
       color: "#64748b",
     },
+    subtitle2: {
+      fontWeight: 600,
+      letterSpacing: "0.01em",
+    },
+    body2: {
+      letterSpacing: "0.005em",
+    },
     button: {
       textTransform: "none",
       fontWeight: 600,
+      letterSpacing: "0.01em",
     },
   },
   shape: {
