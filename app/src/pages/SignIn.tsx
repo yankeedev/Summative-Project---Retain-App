@@ -54,9 +54,10 @@ export default function SignIn() {
         sx={{
           p: { xs: 3, sm: 4 },
           borderRadius: "18px",
-          border: "1px solid #e2e8f0",
+          border: "1px solid",
+          borderColor: "divider",
           boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05)",
-          bgcolor: "#fff",
+          bgcolor: "background.paper",
         }}
       >
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
