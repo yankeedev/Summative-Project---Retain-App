@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useColorMode } from "../context/ColorModeContext";
 import { changePassword, deleteAccount } from "../services/endpoints";
 
 function initials(name: string): string {
@@ -26,6 +27,7 @@ function initials(name: string): string {
 
 export default function Profile() {
   const { user, signOut } = useAuth();
+  const { mode, setMode } = useColorMode();
   const navigate = useNavigate();
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -131,6 +133,34 @@ export default function Profile() {
             />
           </Box>
         </Box>
+      </Paper>
+
+      {/* Appearance */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
+          Appearance
+        </Typography>
+        <Typography variant="body2" sx={{ color: "text.secondary", mb: 2 }}>
+          Choose how Retain looks on this device.
+        </Typography>
+        <Stack direction="row" spacing={1.5} sx={{ flexWrap: "wrap", gap: 1.5 }}>
+          <Button
+            variant={mode === "light" ? "contained" : "outlined"}
+            size="small"
+            onClick={() => setMode("light")}
+            sx={{ fontWeight: 700, borderRadius: "10px" }}
+          >
+            Light mode
+          </Button>
+          <Button
+            variant={mode === "dark" ? "contained" : "outlined"}
+            size="small"
+            onClick={() => setMode("dark")}
+            sx={{ fontWeight: 700, borderRadius: "10px" }}
+          >
+            Dark mode
+          </Button>
+        </Stack>
       </Paper>
 
       {/* Change password */}
