@@ -276,6 +276,28 @@ export default function Layout() {
     bgcolor: "background.paper",
     height: "100vh",
     overflowY: "auto",
+    scrollbarWidth: "thin",
+    scrollbarColor: "transparent transparent",
+    "&::-webkit-scrollbar": {
+      width: 8,
+      height: 8,
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "transparent",
+      borderRadius: 8,
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "transparent",
+    },
+    "&:hover": {
+      scrollbarColor: "rgba(100, 116, 139, 0.4) transparent",
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "rgba(100, 116, 139, 0.4)",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "rgba(100, 116, 139, 0.6)",
+      },
+    },
   };
 
   return (
