@@ -22,9 +22,7 @@ Sign in with the seeded demo accounts below, or create a new account.
 
 ## Video Demo
 
-**Live demo video:** `https://your-video-demo-link-here`
-
-> Update this field with the URL of your recorded walkthrough before submission.
+**Live demo video:** https://youtu.be/pg1u6Hu5cPE
 
 ## Technologies Used
 
