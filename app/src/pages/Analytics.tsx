@@ -343,8 +343,9 @@ export default function Analytics() {
             sx={{
               p: 0.5,
               borderRadius: "16px",
-              border: "1px solid #e2e8f0",
-              bgcolor: "#fff",
+              border: "1px solid",
+              borderColor: "divider",
+              bgcolor: "background.paper",
               "&:hover": { transform: "translateY(-2px)", boxShadow: "0 6px 20px -4px rgba(79, 70, 229, 0.12)" },
             }}
           >
@@ -365,7 +366,7 @@ export default function Analytics() {
 
       {/* Trend + category split */}
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1.2fr 1fr" }, gap: 3 }}>
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff" }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper" }}>
           <CardContent sx={{ p: 2.5 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
               <Box>
@@ -376,13 +377,13 @@ export default function Analytics() {
                   Last 6 months of recorded expenses
                 </Typography>
               </Box>
-              <Chip label="6 months" size="small" sx={{ bgcolor: "#f1f5f9", fontWeight: 600 }} />
+              <Chip label="6 months" size="small" sx={{ bgcolor: "action.hover", fontWeight: 600 }} />
             </Box>
             <TrendBars bars={trend} />
           </CardContent>
         </Card>
 
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff" }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper" }}>
           <CardContent sx={{ p: 2.5 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
               <Box>
@@ -407,7 +408,7 @@ export default function Analytics() {
 
       {/* Payment methods + top expenses */}
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" }, gap: 3 }}>
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff" }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper" }}>
           <CardContent sx={{ p: 2.5 }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
               Payment methods
@@ -437,7 +438,7 @@ export default function Analytics() {
                         </Typography>
                       </Box>
                     </Box>
-                    <Box sx={{ width: "100%", height: 8, bgcolor: "#f1f5f9", borderRadius: 4, overflow: "hidden" }}>
+                    <Box sx={{ width: "100%", height: 8, bgcolor: "action.hover", borderRadius: 4, overflow: "hidden" }}>
                       <Box
                         sx={{
                           width: `${Math.round((row.total / paymentMax) * 100)}%`,
@@ -455,7 +456,7 @@ export default function Analytics() {
           </CardContent>
         </Card>
 
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff" }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper" }}>
           <CardContent sx={{ p: 2.5 }}>
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
               Largest expenses
@@ -478,8 +479,9 @@ export default function Analytics() {
                       gap: 1.5,
                       p: 1.5,
                       borderRadius: "12px",
-                      border: "1px solid #f1f5f9",
-                      "&:hover": { bgcolor: "#f8fafc", borderColor: "#e2e8f0" },
+                      border: "1px solid",
+                      borderColor: "divider",
+                      "&:hover": { bgcolor: "action.hover", borderColor: "divider" },
                     }}
                   >
                     <Box
