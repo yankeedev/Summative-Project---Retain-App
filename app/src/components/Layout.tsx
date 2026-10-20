@@ -36,7 +36,7 @@ import { useAuth } from "../context/AuthContext";
 import { getBudget } from "../services/endpoints";
 import type { Budget } from "../types";
 
-const DRAWER_WIDTH = 264;
+const DRAWER_WIDTH = 276;
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
 const PAGE_TITLES: Record<string, string> = {
@@ -108,7 +108,7 @@ export default function Layout() {
   const pageTitle = PAGE_TITLES[location.pathname] ?? "Overview";
 
   const drawerContent = (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%", p: 2 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%", p: 2.5 }}>
       {/* Brand */}
       <Box
         component={Link}
@@ -136,7 +136,7 @@ export default function Layout() {
       >
         MENU
       </Typography>
-      <List disablePadding sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+      <List disablePadding sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
         {navItems.map((item) => {
           const isActive = location.pathname.startsWith(item.to);
           return (
@@ -146,7 +146,7 @@ export default function Layout() {
               to={item.to}
               sx={{
                 borderRadius: "10px",
-                py: 0.9,
+                py: 1,
                 color: isActive ? "primary.main" : "text.secondary",
                 bgcolor: isActive ? "rgba(79, 70, 229, 0.08)" : "transparent",
                 fontWeight: isActive ? 700 : 500,
@@ -328,7 +328,7 @@ export default function Layout() {
             position: "sticky",
             top: 0,
             zIndex: (t) => t.zIndex.appBar,
-            bgcolor: "rgba(255, 255, 255, 0.9)",
+            bgcolor: "background.paper",
             backdropFilter: "blur(12px)",
             borderBottom: "1px solid",
             borderColor: "divider",
@@ -382,7 +382,7 @@ export default function Layout() {
         </Box>
 
         {/* Main content */}
-        <Box sx={{ flexGrow: 1, p: { xs: 2, md: 4 }, width: "100%", maxWidth: 1400, mx: "auto" }}>
+        <Box sx={{ flexGrow: 1, p: { xs: 2.5, md: 5, xl: 6 }, width: "100%", maxWidth: 1800, mx: "auto" }}>
           <Outlet />
         </Box>
       </Box>
