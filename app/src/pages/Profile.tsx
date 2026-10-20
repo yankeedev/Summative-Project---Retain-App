@@ -105,12 +105,13 @@ export default function Profile() {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2.5, flexWrap: "wrap" }}>
           <Avatar
             alt={user.name}
+            src="/user.svg"
             sx={{
               width: 64,
               height: 64,
-              fontWeight: 700,
-              fontSize: 24,
-              bgcolor: "primary.main",
+              bgcolor: "background.default",
+              border: "1px solid",
+              borderColor: "divider",
             }}
           >
             {initials(user.name)}
