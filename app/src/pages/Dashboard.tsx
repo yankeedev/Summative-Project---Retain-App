@@ -96,7 +96,7 @@ export default function Dashboard() {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 3.5, textAlign: "left" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: { xs: 3, md: 4.5 }, textAlign: "left" }}>
       {/* Header Banner */}
       <Box
         sx={{
@@ -153,7 +153,7 @@ export default function Dashboard() {
             sm: "repeat(2, 1fr)",
             lg: "repeat(4, 1fr)",
           },
-          gap: 2.5,
+          gap: { xs: 2.5, md: 3 },
         }}
       >
         {/* KPI 1: Spent */}
@@ -161,8 +161,9 @@ export default function Dashboard() {
           sx={{
             p: 0.5,
             borderRadius: "16px",
-            border: "1px solid #e2e8f0",
-            bgcolor: "#fff",
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
             "&:hover": { transform: "translateY(-2px)", boxShadow: "0 6px 20px -4px rgba(79, 70, 229, 0.12)" },
           }}
         >
@@ -184,8 +185,9 @@ export default function Dashboard() {
           sx={{
             p: 0.5,
             borderRadius: "16px",
-            border: "1px solid #e2e8f0",
-            bgcolor: "#fff",
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
             "&:hover": { transform: "translateY(-2px)", boxShadow: "0 6px 20px -4px rgba(16, 185, 129, 0.12)" },
           }}
         >
@@ -215,8 +217,9 @@ export default function Dashboard() {
           sx={{
             p: 0.5,
             borderRadius: "16px",
-            border: "1px solid #e2e8f0",
-            bgcolor: "#fff",
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
             "&:hover": { transform: "translateY(-2px)", boxShadow: "0 6px 20px -4px rgba(14, 165, 233, 0.12)" },
           }}
         >
@@ -238,8 +241,9 @@ export default function Dashboard() {
           sx={{
             p: 0.5,
             borderRadius: "16px",
-            border: "1px solid #e2e8f0",
-            bgcolor: "#fff",
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
             "&:hover": { transform: "translateY(-2px)", boxShadow: "0 6px 20px -4px rgba(244, 63, 94, 0.12)" },
           }}
         >
@@ -258,9 +262,9 @@ export default function Dashboard() {
       </Box>
 
       {/* Main Grid: Spending By Category & Recent Expenses */}
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1.1fr 1fr" }, gap: 3 }}>
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1.1fr 1fr" }, gap: { xs: 3, md: 3.5 } }}>
         {/* Card: Spending By Category */}
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff", p: 1 }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper", p: 1 }}>
           <CardContent sx={{ p: 2.5 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
               <Box>
@@ -274,7 +278,7 @@ export default function Dashboard() {
               <Chip
                 label={`${byCategory.length} categories`}
                 size="small"
-                sx={{ bgcolor: "#f1f5f9", fontWeight: 600 }}
+                sx={{ bgcolor: "action.hover", fontWeight: 600 }}
               />
             </Box>
 
@@ -310,7 +314,7 @@ export default function Dashboard() {
                           </Typography>
                         </Box>
                       </Box>
-                      <Box sx={{ width: "100%", height: 8, bgcolor: "#f1f5f9", borderRadius: 4, overflow: "hidden" }}>
+                      <Box sx={{ width: "100%", height: 8, bgcolor: "action.hover", borderRadius: 4, overflow: "hidden" }}>
                         <Box
                           sx={{
                             width: `${barWidth}%`,
@@ -334,8 +338,9 @@ export default function Dashboard() {
                   mt: 3.5,
                   p: 2,
                   borderRadius: "12px",
-                  bgcolor: "#f8fafc",
-                  border: "1px solid #e2e8f0",
+                  bgcolor: "background.default",
+                  border: "1px solid",
+                  borderColor: "divider",
                 }}
               >
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
@@ -353,7 +358,7 @@ export default function Dashboard() {
                   variant="determinate"
                   value={percentOfBudget}
                   color={budget.remaining < 0 ? "error" : percentOfBudget > 75 ? "warning" : "success"}
-                  sx={{ height: 8, borderRadius: 4, bgcolor: "#e2e8f0" }}
+                  sx={{ height: 8, borderRadius: 4, bgcolor: "action.hover" }}
                 />
                 <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
                   <Typography variant="caption" sx={{ color: "text.secondary" }}>
@@ -369,7 +374,7 @@ export default function Dashboard() {
         </Card>
 
         {/* Card: Recent Expenses */}
-        <Card sx={{ borderRadius: "18px", border: "1px solid #e2e8f0", bgcolor: "#fff", p: 1 }}>
+        <Card sx={{ borderRadius: "18px", border: "1px solid", borderColor: "divider", bgcolor: "background.paper", p: 1 }}>
           <CardContent sx={{ p: 2.5 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2.5 }}>
               <Box>
@@ -406,12 +411,13 @@ export default function Dashboard() {
                       justifyContent: "space-between",
                       p: 1.5,
                       borderRadius: "12px",
-                      border: "1px solid #f1f5f9",
-                      bgcolor: "#ffffff",
+                      border: "1px solid",
+                      borderColor: "divider",
+                      bgcolor: "background.paper",
                       transition: "all 0.15s ease-in-out",
                       "&:hover": {
-                        bgcolor: "#f8fafc",
-                        borderColor: "#e2e8f0",
+                        bgcolor: "action.hover",
+                        borderColor: "divider",
                       },
                     }}
                   >
